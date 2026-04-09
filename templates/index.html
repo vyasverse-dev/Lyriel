@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lyriel | Sanctuary</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="dashboard-body" data-username="{{ session.get('username', 'Guest') }}">
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="logo-wrap">
+                <div class="logo">LYRIEL</div>
+                <button id="themeToggleBtn" class="ghost-btn" type="button" aria-label="Toggle theme">☀</button>
+            </div>
+            <section class="profile-card" id="profileCard">
+                <div class="profile-name" id="profileName">{{ session.get('username', 'Guest') }}</div>
+                <div class="profile-meta" id="profileCreatedAt"></div>
+                <div class="profile-stats">
+                    <div><span id="profilePlaylistCount">0</span> playlists</div>
+                    <div><span id="profileSongCount">0</span> songs</div>
+                    <div><span id="profileFavoriteCount">0</span> favorites</div>
+                    <div><span id="profileRecentCount">0</span> recent</div>
+                </div>
+            </section>
+            <nav class="side-nav">
+                <button class="nav-item active" type="button" data-view="home">Home</button>
+                <button class="nav-item" type="button" data-view="search">Search</button>
+                <a href="/logout" class="nav-item logout-link" id="logoutLink">Logout</a>
+            </nav>
+            <div class="sidebar-playlists">
+                <div class="section-title-row">
+                    <p class="section-title">PLAYLISTS</p>
+                    <button id="createPlaylistBtn" class="icon-btn" type="button" aria-label="Create Playlist">＋</button>
+                </div>
+                <div class="side-playlist-list" id="sidePlaylistList"></div>
+            </div>
+        </aside>
+
+        <main class="main-view">
+            <section id="homeView" class="view active">
+                <header class="hero sticky-header">
+                    <h1>Welcome back, {{ session['username'] }}</h1>
+                    <p>Pick a playlist, discover songs, and keep the rhythm flowing.</p>
+                    <p id="memberSinceText"></p>
+                </header>
+                <section class="content-section">
+                    <div class="section-header-row">
+                        <h2>Your Mixes</h2>
+                    </div>
+                    <div class="grid-container" id="playlistGrid"></div>
+                </section>
+                <section class="content-section">
+                    <div class="section-header-row">
+                        <h2>Recently Played</h2>
+                    </div>
+                    <div class="recent-list" id="recentlyPlayedList"></div>
+                </section>
+            </section>
+
+            <section id="searchView" class="view">
+                <header class="hero sticky-header">
+                    <h1>Search Songs</h1>
+                    <p>Filter by title, artist, or album and play instantly.</p>
+                </header>
+                <section class="content-section">
+                    <div class="search-controls">
+                        <div class="search-bar">
+                            <input id="searchInput" type="text" placeholder="Search songs..." />
+                            <button id="clearSearchBtn" class="clear-search-btn" type="button" aria-label="Clear search">✕</button>
+                        </div>
+                        <div class="quick-filters" id="quickFilters">
+                            <button class="ghost-btn quick-filter-btn active" type="button" data-filter-key="all">All</button>
+                            <button class="ghost-btn quick-filter-btn" type="button" data-filter-key="title">Title</button>
+                            <button class="ghost-btn quick-filter-btn" type="button" data-filter-key="artist">Artist</button>
+                            <button class="ghost-btn quick-filter-btn" type="button" data-filter-key="album">Album</button>
+                        </div>
+                        <select id="sortSongsSelect" class="sort-select">
+                            <option value="title">Sort: Title</option>
+                            <option value="artist">Sort: Artist</option>
+                            <option value="duration">Sort: Duration</option>
+                        </select>
+                        <select id="sortSongsOrderSelect" class="sort-select">
+                            <option value="asc">Order: Asc</option>
+                            <option value="desc">Order: Desc</option>
+                        </select>
+                    </div>
+                    <div class="song-table-container">
+                        <div class="song-skeleton hidden" id="songSkeleton"></div>
+                        <table class="song-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Song</th>
+                                    <th>Artist</th>
+                                    <th>Album</th>
+                                    <th>Duration</th>
+                                    <th>Favorite</th>
+                                    <th>Add</th>
+                                </tr>
+                            </thead>
+                            <tbody id="searchSongTable"></tbody>
+                        </table>
+                    </div>
+                    <div class="search-empty hidden" id="searchEmptyState">No results found</div>
+                    <div class="load-more-wrap">
+                        <button class="ghost-btn hidden" id="loadMoreSongsBtn" type="button">Load More</button>
+                    </div>
+                </section>
+            </section>
+
+            <section id="playlistView" class="view">
+                <header class="playlist-header sticky-header">
+                    <div class="playlist-header-left">
+                        <button class="ghost-btn" id="backToHomeBtn" type="button">Back</button>
+                        <h2 id="playlistTitle" class="playlist-title">Playlist</h2>
+                    </div>
+                    <div class="playlist-header-actions">
+                        <button class="ghost-btn" id="playPlaylistBtn" type="button">Play Playlist</button>
+                        <button class="ghost-btn" id="renamePlaylistBtn" type="button">Rename</button>
+                        <button class="danger-btn" id="deletePlaylistBtn" type="button">Delete</button>
+                    </div>
+                </header>
+                <section class="content-section">
+                    <div class="search-controls">
+                        <select id="sortPlaylistSelect" class="sort-select">
+                            <option value="title">Sort: Title</option>
+                            <option value="artist">Sort: Artist</option>
+                            <option value="duration">Sort: Duration</option>
+                        </select>
+                        <select id="sortPlaylistOrderSelect" class="sort-select">
+                            <option value="asc">Order: Asc</option>
+                            <option value="desc">Order: Desc</option>
+                        </select>
+                    </div>
+                    <div class="song-table-container">
+                        <table class="song-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Song</th>
+                                    <th>Artist</th>
+                                    <th>Duration</th>
+                                    <th>Favorite</th>
+                                    <th>Remove</th>
+                                </tr>
+                            </thead>
+                            <tbody id="playlistSongTable"></tbody>
+                        </table>
+                    </div>
+                </section>
+            </section>
+        </main>
+    </div>
+
+    <footer class="player-bar">
+        <div class="now-playing">
+            <img id="nowPlayingCover" class="now-playing-cover" src="" alt="Album cover">
+            <div class="track-info">
+                <div class="track-label">Now Playing</div>
+                <div id="currentTrackTitle" class="track-title">Select a song</div>
+                <div id="currentTrackArtist" class="track-artist">-</div>
+            </div>
+            <button id="favoriteCurrentBtn" class="icon-btn favorite-btn" type="button" aria-label="Favorite">♡</button>
+        </div>
+        <div class="player-controls">
+            <div class="control-buttons">
+                <button class="control-btn" id="shuffleBtn" type="button" aria-label="Shuffle">🔀</button>
+                <button class="control-btn" id="prevBtn" type="button" aria-label="Previous">⏮</button>
+                <button class="control-btn primary" id="playPauseBtn" type="button" aria-label="Play/Pause">▶</button>
+                <button class="control-btn" id="nextBtn" type="button" aria-label="Next">⏭</button>
+                <button class="control-btn" id="repeatBtn" type="button" aria-label="Repeat">🔁</button>
+            </div>
+            <div class="timeline">
+                <span id="currentTimeLabel">0:00</span>
+                <div class="timeline-track">
+                    <input id="seekBar" type="range" min="0" max="100" value="0" aria-label="Seek">
+                </div>
+                <span id="durationLabel">0:00</span>
+            </div>
+        </div>
+        <div class="volume-controls">
+            <span>🔊</span>
+            <input id="volumeRange" type="range" min="0" max="100" value="75">
+        </div>
+    </footer>
+
+    <div id="toastContainer" class="toast-container"></div>
+    <script type="module" src="{{ url_for('static', filename='js/ui.js') }}"></script>
+</body>
+</html>

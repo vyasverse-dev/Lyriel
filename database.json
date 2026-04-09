@@ -1,0 +1,200 @@
+{
+    "users": [
+        {
+            "user_id": 1,
+            "username": "vyas",
+            "password": "password123",
+            "email": "",
+            "created_date": "2024-05-20"
+        },
+        {
+            "user_id": 2,
+            "username": "24MIS1108",
+            "password": "vyas123",
+            "email": "",
+            "created_date": "2024-05-20"
+        },
+        {
+            "user_id": 3,
+            "username": "autouser_20260410",
+            "password": "temp123",
+            "email": "",
+            "created_date": "2026-04-10"
+        },
+        {
+            "user_id": 4,
+            "username": "new_1775763311",
+            "password": "p123456",
+            "email": "",
+            "created_date": "2026-04-10"
+        },
+        {
+            "user_id": 5,
+            "username": "new_1775763321",
+            "password": "p123456",
+            "email": "",
+            "created_date": "2026-04-10"
+        },
+        {
+            "user_id": 6,
+            "username": "Lakshaya_Shree",
+            "password": "Lakshzzz",
+            "email": "",
+            "created_date": "2026-04-10"
+        }
+    ],
+    "playlists": [
+        {
+            "playlist_id": 101,
+            "playlist_name": "Playlist #0",
+            "user_id": 1,
+            "created_date": "2024-05-21",
+            "song_ids": [
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                1
+            ]
+        },
+        {
+            "playlist_id": 102,
+            "playlist_name": "English Songs Playlist",
+            "user_id": 1,
+            "created_date": "2026-03-26",
+            "song_ids": [
+                1,
+                2,
+                3,
+                4,
+                5
+            ]
+        },
+        {
+            "playlist_id": 104,
+            "playlist_name": "Auth Flow Playlist",
+            "user_id": 3,
+            "created_date": "2026-04-10",
+            "song_ids": []
+        },
+        {
+            "playlist_id": 105,
+            "playlist_name": "Auth Flow Playlist",
+            "user_id": 3,
+            "created_date": "2026-04-10",
+            "song_ids": []
+        },
+        {
+            "playlist_id": 106,
+            "playlist_name": "Hello",
+            "user_id": 1,
+            "created_date": "2026-04-10",
+            "song_ids": []
+        }
+    ],
+    "songs": [
+        {
+            "song_id": 1,
+            "song_title": "Heat Waves",
+            "artist": "Glass Animals",
+            "album": "Dreamland",
+            "genre": "Indie Pop",
+            "duration": "3:58"
+        },
+        {
+            "song_id": 2,
+            "song_title": "House of Memories",
+            "artist": "Panic! At The Disco",
+            "album": "Death of a Bachelor",
+            "genre": "Pop Rock",
+            "duration": "3:28"
+        },
+        {
+            "song_id": 3,
+            "song_title": "Royalty",
+            "artist": "Egzod & Maestro Chives",
+            "album": "NCS Release",
+            "genre": "Electronic",
+            "duration": "3:44"
+        },
+        {
+            "song_id": 4,
+            "song_title": "Die With A Smile",
+            "artist": "Lady Gaga & Bruno Mars",
+            "album": "Single",
+            "genre": "Pop Soul",
+            "duration": "4:11"
+        },
+        {
+            "song_id": 5,
+            "song_title": "Dandelions",
+            "artist": "Ruth B.",
+            "album": "Safe Haven",
+            "genre": "Pop",
+            "duration": "3:53"
+        },
+        {
+            "song_id": 6,
+            "song_title": "Despacito",
+            "artist": "Luis Fonsi ft. Daddy Yankee",
+            "album": "Vida",
+            "genre": "Reggaeton",
+            "duration": "3:48"
+        },
+        {
+            "song_id": 7,
+            "song_title": "Daylight",
+            "artist": "David Kushner",
+            "album": "Single",
+            "genre": "Indie Folk",
+            "duration": "3:32"
+        },
+        {
+            "song_id": 8,
+            "song_title": "Hymn for the Weekend",
+            "artist": "Coldplay",
+            "album": "A Head Full of Dreams",
+            "genre": "Alternative",
+            "duration": "4:18"
+        },
+        {
+            "song_id": 9,
+            "song_title": "Night Changes",
+            "artist": "One Direction",
+            "album": "Four",
+            "genre": "Pop",
+            "duration": "3:46"
+        },
+        {
+            "song_id": 10,
+            "song_title": "Legends Never Die",
+            "artist": "Against The Current",
+            "album": "League of Legends",
+            "genre": "Pop Rock",
+            "duration": "3:55"
+        },
+        {
+            "song_id": 11,
+            "song_title": "Judas",
+            "artist": "Lady Gaga",
+            "album": "Born This Way",
+            "genre": "Electropop",
+            "duration": "4:09"
+        },
+        {
+            "song_id": 12,
+            "song_title": "My Life Would Suck Without You",
+            "artist": "Kelly Clarkson",
+            "album": "All I Ever Wanted",
+            "genre": "Pop Rock",
+            "duration": "3:32"
+        }
+    ]
+}

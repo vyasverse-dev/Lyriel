@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lyriel | Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="login-container">
+        <h1>LYRIEL</h1>
+        <p style="text-align: center; color: var(--text-gray); margin-bottom: 2rem;">
+            Unlock your melodies 🎧
+        </p>
+        
+        <form id="loginForm">
+            <div class="input-group">
+                <input type="text" id="username" placeholder="Username" required autocomplete="off">
+            </div>
+
+            <div class="input-group password-group">
+                <input type="password" id="password" placeholder="Password" required>
+                <span id="togglePassword" class="toggle-password">👁</span>
+            </div>
+            <div class="password-strength" id="passwordStrength">Strength: -</div>
+            <label class="remember-me-row">
+                <input type="checkbox" id="rememberMe" checked>
+                <span>Remember Me</span>
+            </label>
+            
+            <button type="submit" id="loginBtn" class="login-btn">
+                Enter the Sanctuary
+            </button>
+
+            <div id="message" class="error-msg"></div>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById('loginForm');
+        const loginBtn = document.getElementById('loginBtn');
+        const messageDiv = document.getElementById('message');
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+        const usernameInput = document.getElementById('username');
+        const rememberMeInput = document.getElementById('rememberMe');
+        const passwordStrength = document.getElementById('passwordStrength');
+        const REMEMBER_ME_KEY = 'lyriel_remember_me';
+
+        function setMessage(text, isError = true) {
+            messageDiv.textContent = text;
+            messageDiv.style.color = isError ? '#ff6a8b' : '#72f1b8';
+        }
+
+        function getPasswordStrengthLabel(password) {
+            let score = 0;
+            if (password.length >= 8) score += 1;
+            if (/[A-Z]/.test(password) && /[a-z]/.test(password)) score += 1;
+            if (/\d/.test(password) || /[^a-zA-Z0-9]/.test(password)) score += 1;
+            if (score <= 1) return 'Weak';
+            if (score === 2) return 'Medium';
+            return 'Strong';
+        }
+
+        function updatePasswordStrength() {
+            const value = passwordInput.value;
+            const label = value ? getPasswordStrengthLabel(value) : '-';
+            passwordStrength.textContent = `Strength: ${label}`;
+            passwordStrength.dataset.strength = label.toLowerCase();
+        }
+
+        async function continueWithCurrentUser() {
+            try {
+                const response = await fetch('/api/me');
+                if (response.ok) {
+                    window.location.href = '/dashboard';
+                }
+            } catch (error) {
+                setMessage('', true);
+            }
+        }
+
+        togglePassword.addEventListener('click', () => {
+            const isPassword = passwordInput.type === 'password';
+            passwordInput.type = isPassword ? 'text' : 'password';
+            togglePassword.textContent = isPassword ? '🙈' : '👁';
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value;
+            setMessage('', true);
+
+            if (!username || !password) {
+                setMessage('Please fill all fields.');
+                return;
+            }
+
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Entering...';
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username,
+                        password,
+                        remember_me: rememberMeInput.checked
+                    })
+                });
+                const data = await response.json();
+                if (!response.ok) {
+                    setMessage(data.message || 'Invalid credentials');
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = 'Enter the Sanctuary';
+                    return;
+                }
+                if (data.auto_registered) {
+                    setMessage('New account created automatically ✨', false);
+                } else {
+                    setMessage('Login successful. Welcome back ✨', false);
+                }
+                localStorage.setItem(REMEMBER_ME_KEY, rememberMeInput.checked ? 'true' : 'false');
+                loginBtn.textContent = 'Welcome ✨';
+                setTimeout(() => {
+                    window.location.href = '/dashboard';
+                }, 320);
+            } catch (error) {
+                setMessage('Server error. Try again.');
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Enter the Sanctuary';
+            }
+        });
+
+        passwordInput.addEventListener('input', updatePasswordStrength);
+        updatePasswordStrength();
+        rememberMeInput.checked = localStorage.getItem(REMEMBER_ME_KEY) !== 'false';
+        continueWithCurrentUser();
+    </script>
+
+</body>
+</html>
